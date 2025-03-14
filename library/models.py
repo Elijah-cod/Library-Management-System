@@ -61,3 +61,38 @@ class Book(Base):
 
     def __repr__(self):
         return f"<Book(title={self.title}, genre={self.genre})>"
+    
+
+    @classmethod
+    def create(cls, title, genre, publication_date, author_name):
+        session = get_db()
+        author = Author.find_by_name(author_name)
+        if not author:
+            print("Error: Author does not exist. Please add the author first.")
+            return
+
+        book = cls(title=title, genre=genre, publication_date=publication_date, author_id=author.id)
+        session.add(book)
+        session.commit()
+        print(f"Book '{title}' added successfully!")
+
+    @classmethod
+    def get_all(cls):
+        session = get_db()
+        return session.query(cls).all()
+    
+    @classmethod
+    def find_by_title(cls, title):
+        session = get_db()
+        return session.query(cls).filter_by(title=title).first()
+    
+    @classmethod
+    def delete(cls, title):
+        session = get_db()
+        book = cls.find_by_title(title)
+        if book:
+            session.delete(book)
+            session.commit()
+            print(f"Book '{title}' deleted successfully!")
+        else:
+            print("Book not found.")
