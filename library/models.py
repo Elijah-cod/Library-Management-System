@@ -10,6 +10,12 @@ class Author(Base):
     birth_date = Column(Date)
     nationality = Column(String)
 
+    # One-to-Many Relationship
+    books = relationship("Book", back_populates="author", cascade="all, delete-orphan")
+
+    def __repr__(self):
+        return f"<Author(name={self.name}, nationality={self.nationality})>"
+
 
 class Book(Base):
     __tablename__ = "books"
@@ -19,3 +25,9 @@ class Book(Base):
     genre = Column(String)
     publication_date = Column(Date)
     author_id = Column(Integer, ForeignKey("authors.id"), nullable=False)
+
+    # Relationship to Author
+    author = relationship("Author", back_populates="books")
+
+    def __repr__(self):
+        return f"<Book(title={self.title}, genre={self.genre})>"
