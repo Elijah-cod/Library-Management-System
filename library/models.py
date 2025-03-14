@@ -1,7 +1,8 @@
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, Date, ForeignKey
 from sqlalchemy.orm import relationship
-from .database import Base  # Import Base from database.py
+from .database import Base, get_db 
+
 
 class Author(Base):
     __tablename__ = "authors"
@@ -90,8 +91,10 @@ class Book(Base):
             if not author:
                 print("Error: Author does not exist. Please add the author first.")
                 return
-
-            book = cls(title=title, genre=genre, publication_date=publication_date, author_id=author.id)
+            
+            # Convert birth_date from string to date object
+            publication_date_obj = datetime.strptime(publication_date, "%Y-%m-%d").date()
+            book = cls(title=title, genre=genre, publication_date=publication_date_obj, author_id=author.id)
             session.add(book)
             session.commit()
             print(f"Book '{title}' added successfully!")
