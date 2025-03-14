@@ -13,6 +13,7 @@ class Author(Base):
     nationality = Column(String, nullable=False)
 
     # One-to-Many Relationship
+    # Keeps track of changes in the Table and reflects any changes to both the tables
     books = relationship("Book", back_populates="author", cascade="all, delete-orphan")
 
     def __repr__(self):
