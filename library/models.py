@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Date, ForeignKey
 from sqlalchemy.orm import relationship
-from .database import Base
+from .database import Base, get_db
 
 class Author(Base):
     __tablename__ = "authors"
@@ -15,6 +15,36 @@ class Author(Base):
 
     def __repr__(self):
         return f"<Author(name={self.name}, nationality={self.nationality})>"
+    
+
+    @classmethod
+    def create(cls, name, birth_date, nationality):
+        session = get_db()  # Use the get_db() function to get a session
+        author = cls(name=name, birth_date=birth_date, nationality=nationality)
+        session.add(author)
+        session.commit()
+        print(f"Author '{name}' added successfully!")
+
+    @classmethod
+    def get_all(cls):
+        session = get_db()
+        return session.query(cls).all()
+    
+    @classmethod
+    def find_by_name(cls, name):
+        session = get_db()
+        return session.query(cls).filter_by(name=name).first()
+    
+    @classmethod
+    def delete(cls, name):
+        session = get_db()
+        author = cls.find_by_name(name)
+        if author:
+            session.delete(author)
+            session.commit()
+            print(f"Author '{name}' deleted successfully!")
+        else:
+            print("Author not found.")
 
 
 class Book(Base):
