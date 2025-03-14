@@ -9,7 +9,9 @@ def main_menu():
         print("4. Add Book")
         print("5. View All Books")
         print("6. Delete Book")
-        print("7. Exit")
+        print("7. Find Book")
+        print("8. Find Author")
+        print("9. Exit")
         
         choice = input("Choose an option: ")
         if choice == "1":
@@ -42,8 +44,16 @@ def main_menu():
         elif choice == "6":
             title = input("Enter Book Title to Delete: ")
             Book.delete(title)
-
+        
         elif choice == "7":
+            title = input("Enter Book Title to Find: ")
+            print(Book.find_by_title(title))
+            
+        elif choice == "8":
+            name = input("Enter Author Name to Find: ")
+            print(Author.find_by_name(name))
+
+        elif choice == "9":
             print("Exiting...")
             break
 
