@@ -10,3 +10,8 @@ Base = declarative_base()
 
 def get_db():
     return SessionLocal()
+
+def create_tables():
+    """Create all tables in the database."""
+    Base.metadata.create_all(bind=engine)
+    print("Tables created successfully!")
